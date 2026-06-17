@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { Outlet } from 'react-router-dom';
+import NotificationSnackbar from '../components/NotificationSnackbar';
 
 const darkTheme = createTheme({
   palette: {
@@ -39,6 +40,7 @@ export const AppLayout: React.FC = () => {
           <Outlet />
         </Container>
       </div>
+      <NotificationSnackbar />
     </ThemeProvider>
   );
 };
