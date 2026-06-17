@@ -145,7 +145,37 @@ public class InMemoryUserRepository implements UserRepository {
      * Initializes the repository with 3 realistic sample users.
      */
     private void initializeSampleData() {
-        // User 1
+        String[] firstNames = {
+            "Emmanuel", "Jean", "Marie", "Pierre", "Joseph", 
+            "Paul", "Samuel", "David", "Chantal", "Florence", 
+            "Esther", "Ruth", "Lucas", "Marc", "Daniel", 
+            "Alain", "Eric", "Pascal", "Olivier", "Christian", 
+            "Henri", "Robert", "Therese", "Jeanne", "Alice", 
+            "Cecile", "Sophie", "Catherine", "Anne", "Antoine"
+        };
+        String[] lastNames = {
+            "Ngane", "Mbappe", "Ngo", "Eto'o", "Song", 
+            "Abega", "Milla", "Toko", "Nkono", "N'Koulou", 
+            "Anguissa", "Onana", "Choupo", "Toko-Ekambi", "Kameni", 
+            "Wome", "Geremi", "Mboma", "Foe", "Kalla", 
+            "Biyik", "Kunde", "N'Gadjui", "Tchakounte", "Nguema", 
+            "Kamga", "Talla", "Fosso", "Simba", "Youmbi"
+        };
+
+        String[][] cities = {
+            {"Douala", "Littoral"},
+            {"Yaounde", "Centre"},
+            {"Buea", "South West"},
+            {"Limbe", "South West"},
+            {"Bafoussam", "West"},
+            {"Bamenda", "North West"},
+            {"Garoua", "North"},
+            {"Maroua", "Far North"},
+            {"Ngaoundere", "Adamawa"},
+            {"Bertoua", "East"}
+        };
+
+        // User 1 must be exactly Emmanuel Ngane with specific ID so tests can find it by constant ID
         User user1 = new User(
                 UUID.fromString("11111111-1111-1111-1111-111111111111"),
                 "emmanuel.ngane@example.cm",
@@ -171,56 +201,38 @@ public class InMemoryUserRepository implements UserRepository {
         ));
         save(user1);
 
-        // User 2
-        User user2 = new User(
-                UUID.fromString("22222222-2222-2222-2222-222222222222"),
-                "jean.mbappe@example.cm",
-                "Jean",
-                "Mbappe",
-                null
-        );
-        user2.addAddress(new Address(
-                UUID.fromString("22222222-2222-2222-2222-333333333333"),
-                "Molyko Street",
-                "Buea",
-                "South West",
-                "Cameroon",
-                "BP 45"
-        ));
-        user2.addAddress(new Address(
-                UUID.fromString("22222222-2222-2222-2222-444444444444"),
-                "Down Beach Road",
-                "Limbe",
-                "South West",
-                "Cameroon",
-                "BP 90"
-        ));
-        save(user2);
+        // Generate the other 29 users programmatically
+        for (int i = 1; i < 30; i++) {
+            String firstName = firstNames[i];
+            String lastName = lastNames[i];
+            String email = firstName.toLowerCase() + "." + lastName.toLowerCase().replace("'", "") + "@example.cm";
+            
+            // Generate some deterministic UUIDs so they are consistent
+            UUID userId = new UUID(0x2222222222222222L + i, 0x2222222222222222L + i);
 
-        // User 3
-        User user3 = new User(
-                UUID.fromString("33333333-3333-3333-3333-333333333333"),
-                "marie.ngo@example.cm",
-                "Marie",
-                "Ngo",
-                null
-        );
-        user3.addAddress(new Address(
-                UUID.fromString("33333333-3333-3333-3333-444444444444"),
-                "Rue de la Joie, Deido",
-                "Douala",
-                "Littoral",
-                "Cameroon",
-                "BP 88"
-        ));
-        user3.addAddress(new Address(
-                UUID.fromString("33333333-3333-3333-3333-555555555555"),
-                "Bastos Area",
-                "Yaounde",
-                "Centre",
-                "Cameroon",
-                "BP 415"
-        ));
-        save(user3);
+            User user = new User(userId, email, firstName, lastName, null);
+
+            // Give them two addresses based on their index
+            int cityIdx1 = (i * 2) % cities.length;
+            int cityIdx2 = (i * 2 + 1) % cities.length;
+
+            user.addAddress(new Address(
+                    new UUID(0x3333333333333333L + i, 0x1111111111111111L + i),
+                    "Street " + (i * 10 + 1),
+                    cities[cityIdx1][0],
+                    cities[cityIdx1][1],
+                    "Cameroon",
+                    "BP " + (i * 5)
+            ));
+            user.addAddress(new Address(
+                    new UUID(0x3333333333333333L + i, 0x2222222222222222L + i),
+                    "Street " + (i * 10 + 2),
+                    cities[cityIdx2][0],
+                    cities[cityIdx2][1],
+                    "Cameroon",
+                    "BP " + (i * 5 + 1)
+            ));
+            save(user);
+        }
     }
 }

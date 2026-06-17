@@ -26,12 +26,12 @@ class InMemoryUserRepositoryTest {
     }
 
     @Test
-    void initializeSampleData_VerifiesThreeUsersInitialized() {
+    void initializeSampleData_VerifiesUsersInitialized() {
         // Act
         List<User> users = userRepository.findUsers(0, 10, "");
 
         // Assert
-        assertEquals(3, users.size());
+        assertEquals(10, users.size());
         
         // Assert first user
         Optional<User> emmanuel = userRepository.findByEmail("emmanuel.ngane@example.cm");
@@ -143,7 +143,7 @@ class InMemoryUserRepositoryTest {
 
         // Assert
         assertFalse(userRepository.findById(id).isPresent());
-        assertEquals(2, userRepository.findUsers(0, 10, "").size());
+        assertEquals(29, userRepository.countUsers(""));
     }
 
     @Test
@@ -155,7 +155,7 @@ class InMemoryUserRepositoryTest {
 
         // Assert
         assertEquals(2, page0.size());
-        assertEquals(1, page1.size());
+        assertEquals(2, page1.size());
         
         // Assert items are different (pagination offset works)
         assertNotEquals(page0.get(0).getId(), page1.get(0).getId());
@@ -167,8 +167,8 @@ class InMemoryUserRepositoryTest {
         List<User> results = userRepository.findUsers(0, 10, "Jean");
 
         // Assert
-        assertEquals(1, results.size());
-        assertEquals("Jean", results.get(0).getFirstName());
+        assertEquals(2, results.size());
+        assertTrue(results.stream().anyMatch(u -> "Jean".equals(u.getFirstName())));
     }
 
     @Test
@@ -194,10 +194,10 @@ class InMemoryUserRepositoryTest {
     @Test
     void findUsers_Search_CaseInsensitive() {
         // Act
-        List<User> results = userRepository.findUsers(0, 10, "nG");
+        List<User> results = userRepository.findUsers(0, 10, "mB");
 
         // Assert
-        assertEquals(2, results.size()); // matches Ngane and Ngo
+        assertEquals(5, results.size()); // matches Mbappe, Mboma, Toko-Ekambi, Youmbi, Simba
     }
 
     @Test
@@ -221,8 +221,8 @@ class InMemoryUserRepositoryTest {
     @Test
     void countUsers_ReturnsCorrectCount() {
         // Act & Assert
-        assertEquals(3, userRepository.countUsers(""));
-        assertEquals(2, userRepository.countUsers("ng"));
+        assertEquals(30, userRepository.countUsers(""));
+        assertEquals(5, userRepository.countUsers("mb"));
         assertEquals(0, userRepository.countUsers("NonExistentNameString"));
     }
 }

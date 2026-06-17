@@ -45,12 +45,12 @@ class UserIntegrationTest {
 
     @Test
     void testFullUserLifecycleAndWorkflow() throws Exception {
-        // 1. Get all users (should return the 3 sample users initialized by default inside a page wrapper)
+        // 1. Get all users (should return the 30 sample users initialized by default inside a page wrapper, paged by 10)
         mockMvc.perform(get("/api/v1/users"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(3))
-                .andExpect(jsonPath("$.content[0].email").value("emmanuel.ngane@example.cm"))
-                .andExpect(jsonPath("$.totalElements").value(3))
+                .andExpect(jsonPath("$.content.length()").value(10))
+                .andExpect(jsonPath("$.content[0].email").value("antoine.youmbi@example.cm"))
+                .andExpect(jsonPath("$.totalElements").value(30))
                 .andExpect(jsonPath("$.page").value(0))
                 .andExpect(jsonPath("$.size").value(10));
 
