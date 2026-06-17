@@ -22,12 +22,12 @@
 ---
 
 ## Phase 2 - Backend API
-- [ ] UserController
-- [ ] Validation
-- [ ] Global exception handling
-- [ ] CORS configuration
-- [ ] Security headers
-- [ ] Lightweight rate limiting
+- [x] UserController
+- [x] Validation
+- [x] Global exception handling
+- [x] CORS configuration
+- [x] Security headers
+- [x] Lightweight rate limiting
 
 ---
 
