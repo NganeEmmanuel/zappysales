@@ -4,7 +4,8 @@ import type {
   CreateUserRequest, 
   UpdateUserRequest, 
   CreateAddressRequest, 
-  UpdateAddressRequest 
+  UpdateAddressRequest,
+  PageResponse
 } from '../types';
 
 /**
@@ -13,10 +14,12 @@ import type {
  */
 export const userService = {
   /**
-   * Retrieves a list of all users.
+   * Retrieves a paginated and filtered page of users.
    */
-  getUsers: async (): Promise<User[]> => {
-    return apiClient.get<unknown, User[]>('/users');
+  getUsers: async (page: number, size: number, search: string): Promise<PageResponse<User>> => {
+    return apiClient.get<unknown, PageResponse<User>>('/users', {
+      params: { page, size, search }
+    });
   },
 
   /**

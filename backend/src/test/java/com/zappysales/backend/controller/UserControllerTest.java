@@ -6,6 +6,7 @@ import com.zappysales.backend.dto.request.CreateUserRequest;
 import com.zappysales.backend.dto.request.UpdateAddressRequest;
 import com.zappysales.backend.dto.request.UpdateUserRequest;
 import com.zappysales.backend.dto.response.AddressResponse;
+import com.zappysales.backend.dto.response.UserPageResponse;
 import com.zappysales.backend.dto.response.UserResponse;
 import com.zappysales.backend.exception.ResourceNotFoundException;
 import com.zappysales.backend.service.UserService;
@@ -43,12 +44,15 @@ class UserControllerTest {
     private UserService userService;
 
     @Test
-    void getAllUsers_Success() throws Exception {
+    void getUsers_Success() throws Exception {
         // Arrange
         UserResponse userResponse = new UserResponse(
                 UUID.randomUUID(), "john@example.com", "John", "Doe", Collections.emptyList()
         );
-        when(userService.getAllUsers()).thenReturn(List.of(userResponse));
+        UserPageResponse pageResponse = new UserPageResponse(
+                List.of(userResponse), 0, 10, 1L, 1, false, false
+        );
+        when(userService.findUsers(0, 10, "")).thenReturn(pageResponse);
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/users"))
@@ -56,8 +60,12 @@ class UserControllerTest {
                 .andExpect(header().string("X-Content-Type-Options", "nosniff"))
                 .andExpect(header().string("X-Frame-Options", "DENY"))
                 .andExpect(header().string("Referrer-Policy", "no-referrer"))
-                .andExpect(jsonPath("$[0].email").value("john@example.com"))
-                .andExpect(jsonPath("$[0].firstName").value("John"));
+                .andExpect(jsonPath("$.content[0].email").value("john@example.com"))
+                .andExpect(jsonPath("$.content[0].firstName").value("John"))
+                .andExpect(jsonPath("$.page").value(0))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.totalPages").value(1));
     }
 
     @Test

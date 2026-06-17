@@ -4,6 +4,7 @@ import com.zappysales.backend.dto.request.CreateAddressRequest;
 import com.zappysales.backend.dto.request.CreateUserRequest;
 import com.zappysales.backend.dto.request.UpdateAddressRequest;
 import com.zappysales.backend.dto.request.UpdateUserRequest;
+import com.zappysales.backend.dto.response.UserPageResponse;
 import com.zappysales.backend.dto.response.UserResponse;
 import com.zappysales.backend.exception.EmailAlreadyExistsException;
 import com.zappysales.backend.exception.ResourceNotFoundException;
@@ -37,11 +38,14 @@ public interface UserService {
     UserResponse getUserById(UUID id);
 
     /**
-     * Retrieves all users currently registered in the system.
+     * Finds users matching a search query using pagination.
      *
-     * @return a list of all user details
+     * @param page   the 0-based page index
+     * @param size   the page size limit
+     * @param search the case-insensitive search text
+     * @return a paginated and filtered list of user details
      */
-    List<UserResponse> getAllUsers();
+    UserPageResponse findUsers(int page, int size, String search);
 
     /**
      * Updates an existing user's profile information.

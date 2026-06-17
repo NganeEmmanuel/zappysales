@@ -9,6 +9,13 @@ export const useUsers = () => {
   const selectedUser = useUserStore((state) => state.selectedUser);
   const loading = useUserStore((state) => state.loading);
   const error = useUserStore((state) => state.error);
+  
+  // Pagination States
+  const currentPage = useUserStore((state) => state.currentPage);
+  const pageSize = useUserStore((state) => state.pageSize);
+  const searchTerm = useUserStore((state) => state.searchTerm);
+  const totalPages = useUserStore((state) => state.totalPages);
+  const totalElements = useUserStore((state) => state.totalElements);
 
   const fetchUsers = useUserStore((state) => state.fetchUsers);
   const fetchUserById = useUserStore((state) => state.fetchUserById);
@@ -26,6 +33,11 @@ export const useUsers = () => {
     selectedUser,
     loading,
     error,
+    currentPage,
+    pageSize,
+    searchTerm,
+    totalPages,
+    totalElements,
 
     // Actions
     fetchUsers,

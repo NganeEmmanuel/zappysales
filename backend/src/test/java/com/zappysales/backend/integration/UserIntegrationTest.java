@@ -45,11 +45,14 @@ class UserIntegrationTest {
 
     @Test
     void testFullUserLifecycleAndWorkflow() throws Exception {
-        // 1. Get all users (should return the 3 sample users initialized by default)
+        // 1. Get all users (should return the 3 sample users initialized by default inside a page wrapper)
         mockMvc.perform(get("/api/v1/users"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
-                .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
+                .andExpect(jsonPath("$.content.length()").value(3))
+                .andExpect(jsonPath("$.content[0].email").value("john.doe@example.com"))
+                .andExpect(jsonPath("$.totalElements").value(3))
+                .andExpect(jsonPath("$.page").value(0))
+                .andExpect(jsonPath("$.size").value(10));
 
         // 2. Retrieve a specific user (John Doe)
         UUID johnId = UUID.fromString("11111111-1111-1111-1111-111111111111");

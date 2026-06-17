@@ -27,11 +27,22 @@ public interface UserRepository {
     Optional<User> findByEmail(String email);
 
     /**
-     * Retrieves all users.
+     * Finds users matching a search query using pagination.
      *
-     * @return a list of all users
+     * @param page   the 0-based page index
+     * @param size   the page size limit
+     * @param search the case-insensitive search text
+     * @return a list slice of matching users
      */
-    List<User> findAll();
+    List<User> findUsers(int page, int size, String search);
+
+    /**
+     * Counts the total number of users matching a search query.
+     *
+     * @param search the case-insensitive search text
+     * @return the total matching elements count
+     */
+    long countUsers(String search);
 
     /**
      * Saves a user. If the user already exists, updates it; otherwise, creates a new one.

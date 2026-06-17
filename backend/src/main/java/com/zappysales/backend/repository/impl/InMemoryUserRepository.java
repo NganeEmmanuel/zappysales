@@ -50,10 +50,31 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public List<User> findAll() {
+    public List<User> findUsers(int page, int size, String search) {
         return users.values().stream()
+                .filter(user -> matchesSearch(user, search))
+                .skip((long) page * size)
+                .limit(size)
                 .map(this::cloneUser)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public long countUsers(String search) {
+        return users.values().stream()
+                .filter(user -> matchesSearch(user, search))
+                .count();
+    }
+
+    private boolean matchesSearch(User user, String search) {
+        if (search == null || search.trim().isEmpty()) {
+            return true;
+        }
+        String q = search.toLowerCase().trim();
+        boolean matchesFirstName = user.getFirstName() != null && user.getFirstName().toLowerCase().contains(q);
+        boolean matchesLastName = user.getLastName() != null && user.getLastName().toLowerCase().contains(q);
+        boolean matchesEmail = user.getEmail() != null && user.getEmail().toLowerCase().contains(q);
+        return matchesFirstName || matchesLastName || matchesEmail;
     }
 
     @Override

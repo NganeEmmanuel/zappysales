@@ -4,6 +4,7 @@ import com.zappysales.backend.dto.request.CreateAddressRequest;
 import com.zappysales.backend.dto.request.CreateUserRequest;
 import com.zappysales.backend.dto.request.UpdateAddressRequest;
 import com.zappysales.backend.dto.request.UpdateUserRequest;
+import com.zappysales.backend.dto.response.UserPageResponse;
 import com.zappysales.backend.dto.response.UserResponse;
 import com.zappysales.backend.exception.EmailAlreadyExistsException;
 import com.zappysales.backend.exception.ResourceNotFoundException;
@@ -20,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -191,5 +193,35 @@ class UserServiceImplTest {
         // Assert
         assertNotNull(response);
         assertTrue(response.getAddresses().isEmpty());
+    }
+
+    @Test
+    void findUsers_Success() {
+        // Arrange
+        User user1 = new User(UUID.randomUUID(), "john@example.com", "John", "Doe", new ArrayList<>());
+        User user2 = new User(UUID.randomUUID(), "jane@example.com", "Jane", "Smith", new ArrayList<>());
+        
+        when(userRepository.countUsers("")).thenReturn(2L);
+        when(userRepository.findUsers(0, 10, "")).thenReturn(List.of(user1, user2));
+
+        // Act
+        UserPageResponse response = userService.findUsers(0, 10, "");
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(2, response.getContent().size());
+        assertEquals(0, response.getPage());
+        assertEquals(10, response.getSize());
+        assertEquals(2L, response.getTotalElements());
+        assertEquals(1, response.getTotalPages());
+        assertFalse(response.isHasNext());
+        assertFalse(response.isHasPrevious());
+    }
+
+    @Test
+    void findUsers_InvalidArguments_ThrowsException() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> userService.findUsers(-1, 10, ""));
+        assertThrows(IllegalArgumentException.class, () -> userService.findUsers(0, 0, ""));
     }
 }

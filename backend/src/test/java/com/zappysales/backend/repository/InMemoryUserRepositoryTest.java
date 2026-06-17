@@ -28,7 +28,7 @@ class InMemoryUserRepositoryTest {
     @Test
     void initializeSampleData_VerifiesThreeUsersInitialized() {
         // Act
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findUsers(0, 10, "");
 
         // Assert
         assertEquals(3, users.size());
@@ -143,6 +143,86 @@ class InMemoryUserRepositoryTest {
 
         // Assert
         assertFalse(userRepository.findById(id).isPresent());
-        assertEquals(2, userRepository.findAll().size());
+        assertEquals(2, userRepository.findUsers(0, 10, "").size());
+    }
+
+    @Test
+    void findUsers_Pagination_Works() {
+        // Act - Page 0, Size 2
+        List<User> page0 = userRepository.findUsers(0, 2, "");
+        // Act - Page 1, Size 2
+        List<User> page1 = userRepository.findUsers(1, 2, "");
+
+        // Assert
+        assertEquals(2, page0.size());
+        assertEquals(1, page1.size());
+        
+        // Assert items are different (pagination offset works)
+        assertNotEquals(page0.get(0).getId(), page1.get(0).getId());
+    }
+
+    @Test
+    void findUsers_Search_FirstName() {
+        // Act
+        List<User> results = userRepository.findUsers(0, 10, "Jane");
+
+        // Assert
+        assertEquals(1, results.size());
+        assertEquals("Jane", results.get(0).getFirstName());
+    }
+
+    @Test
+    void findUsers_Search_LastName() {
+        // Act
+        List<User> results = userRepository.findUsers(0, 10, "Smith");
+
+        // Assert
+        assertEquals(1, results.size());
+        assertEquals("Smith", results.get(0).getLastName());
+    }
+
+    @Test
+    void findUsers_Search_Email() {
+        // Act
+        List<User> results = userRepository.findUsers(0, 10, "robert.j");
+
+        // Assert
+        assertEquals(1, results.size());
+        assertEquals("robert.j@example.com", results.get(0).getEmail());
+    }
+
+    @Test
+    void findUsers_Search_CaseInsensitive() {
+        // Act
+        List<User> results = userRepository.findUsers(0, 10, "jOhN");
+
+        // Assert
+        assertEquals(2, results.size()); // matches "John" Doe and "john.doe@example.com" and "Johnson"
+    }
+
+    @Test
+    void findUsers_PageBoundaries_ReturnsEmpty() {
+        // Act - Page index out of bounds
+        List<User> results = userRepository.findUsers(5, 10, "");
+
+        // Assert
+        assertTrue(results.isEmpty());
+    }
+
+    @Test
+    void findUsers_EmptyResult_ForUnmatchedQuery() {
+        // Act
+        List<User> results = userRepository.findUsers(0, 10, "NonExistentNameString");
+
+        // Assert
+        assertTrue(results.isEmpty());
+    }
+
+    @Test
+    void countUsers_ReturnsCorrectCount() {
+        // Act & Assert
+        assertEquals(3, userRepository.countUsers(""));
+        assertEquals(2, userRepository.countUsers("john"));
+        assertEquals(0, userRepository.countUsers("NonExistentNameString"));
     }
 }

@@ -4,11 +4,13 @@ import com.zappysales.backend.dto.request.CreateAddressRequest;
 import com.zappysales.backend.dto.request.CreateUserRequest;
 import com.zappysales.backend.dto.request.UpdateAddressRequest;
 import com.zappysales.backend.dto.request.UpdateUserRequest;
+import com.zappysales.backend.dto.response.UserPageResponse;
 import com.zappysales.backend.dto.response.UserResponse;
 import com.zappysales.backend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,14 +43,20 @@ public class UserController {
     }
 
     /**
-     * Retrieves all users registered in the system.
+     * Retrieves users registered in the system with pagination and search.
      *
-     * @return a list of all users
+     * @param page   the 0-based page index (default 0)
+     * @param size   the page size limit (default 10)
+     * @param search the search query filter (default "")
+     * @return a page response containing matching users
      */
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<UserPageResponse> getUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "") String search) {
+        UserPageResponse usersPage = userService.findUsers(page, size, search);
+        return ResponseEntity.ok(usersPage);
     }
 
     /**

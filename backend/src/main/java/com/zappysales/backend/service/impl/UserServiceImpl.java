@@ -4,6 +4,7 @@ import com.zappysales.backend.dto.request.CreateAddressRequest;
 import com.zappysales.backend.dto.request.CreateUserRequest;
 import com.zappysales.backend.dto.request.UpdateAddressRequest;
 import com.zappysales.backend.dto.request.UpdateUserRequest;
+import com.zappysales.backend.dto.response.UserPageResponse;
 import com.zappysales.backend.dto.response.UserResponse;
 import com.zappysales.backend.exception.EmailAlreadyExistsException;
 import com.zappysales.backend.exception.ResourceNotFoundException;
@@ -66,9 +67,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return userMapper.toUserResponseList(users);
+    public UserPageResponse findUsers(int page, int size, String search) {
+        if (page < 0) {
+            throw new IllegalArgumentException("Page index cannot be less than zero");
+        }
+        if (size <= 0) {
+            throw new IllegalArgumentException("Page size must be greater than zero");
+        }
+
+        long totalElements = userRepository.countUsers(search);
+        List<User> matchedUsers = userRepository.findUsers(page, size, search);
+        List<UserResponse> content = userMapper.toUserResponseList(matchedUsers);
+
+        int totalPages = (int) Math.ceil((double) totalElements / size);
+        boolean hasNext = (page + 1) < totalPages;
+        boolean hasPrevious = page > 0;
+
+        return UserPageResponse.builder()
+                .content(content)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .hasNext(hasNext)
+                .hasPrevious(hasPrevious)
+                .build();
     }
 
     @Override

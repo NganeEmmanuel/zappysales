@@ -13,11 +13,16 @@ import type { ApiError } from '../../../api/client';
  * Interface defining the users state and actions inside the userStore.
  */
 interface UserState {
-  // States
+  // Pagination States
   users: User[];
   selectedUser: User | null;
   loading: boolean;
   error: string | null;
+  currentPage: number;
+  pageSize: number;
+  searchTerm: string;
+  totalPages: number;
+  totalElements: number;
 
   // Sync actions
   setUsers: (users: User[]) => void;
@@ -28,7 +33,7 @@ interface UserState {
   clearSelectedUser: () => void;
 
   // Async actions
-  fetchUsers: () => Promise<void>;
+  fetchUsers: (page?: number, size?: number, search?: string) => Promise<void>;
   fetchUserById: (userId: string) => Promise<void>;
   createUser: (request: CreateUserRequest) => Promise<void>;
   updateUser: (userId: string, request: UpdateUserRequest) => Promise<void>;
@@ -40,27 +45,54 @@ interface UserState {
 /**
  * Zustand hook store for managing users feature states in the application.
  */
-export const useUserStore = create<UserState>((set) => ({
+export const useUserStore = create<UserState>((set, get) => ({
   // Initial States
   users: [],
   selectedUser: null,
   loading: false,
   error: null,
+  currentPage: 0,
+  pageSize: 10,
+  searchTerm: '',
+  totalPages: 0,
+  totalElements: 0,
 
   // Sync Actions
   setUsers: (users) => set({ users }),
   setSelectedUser: (selectedUser) => set({ selectedUser }),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
-  clearStore: () => set({ users: [], selectedUser: null, loading: false, error: null }),
+  clearStore: () => set({ 
+    users: [], 
+    selectedUser: null, 
+    loading: false, 
+    error: null,
+    currentPage: 0,
+    pageSize: 10,
+    searchTerm: '',
+    totalPages: 0,
+    totalElements: 0
+  }),
   clearSelectedUser: () => set({ selectedUser: null }),
 
   // Async Actions
-  fetchUsers: async () => {
+  fetchUsers: async (page, size, search) => {
+    const p = page !== undefined ? page : get().currentPage;
+    const s = size !== undefined ? size : get().pageSize;
+    const q = search !== undefined ? search : get().searchTerm;
+
     set({ loading: true, error: null });
     try {
-      const data = await userService.getUsers();
-      set({ users: data, loading: false });
+      const response = await userService.getUsers(p, s, q);
+      set({ 
+        users: response.content, 
+        currentPage: response.page,
+        pageSize: response.size,
+        searchTerm: q,
+        totalElements: response.totalElements,
+        totalPages: response.totalPages,
+        loading: false 
+      });
     } catch (err) {
       const apiErr = err as ApiError;
       set({ error: apiErr.message || 'Failed to fetch users', loading: false });
