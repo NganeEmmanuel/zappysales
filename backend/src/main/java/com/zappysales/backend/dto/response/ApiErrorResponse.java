@@ -1,14 +1,26 @@
 package com.zappysales.backend.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * Standard DTO representing API error response payloads.
  */
+@Schema(description = "Response payload representing details of an API error")
 public class ApiErrorResponse {
 
+    @Schema(description = "ISO-8601 timestamp representing when the exception was raised", example = "2026-06-17T05:47:00.000Z")
     private String timestamp;
+
+    @Schema(description = "HTTP status code representing the error category", example = "400")
     private int status;
+
+    @Schema(description = "HTTP status code description category name", example = "Bad Request")
     private String error;
+
+    @Schema(description = "Detailed explanation message detailing why the error was thrown", example = "Email is required")
     private String message;
+
+    @Schema(description = "The target request path that initiated the transaction", example = "/api/v1/users")
     private String path;
 
     /**

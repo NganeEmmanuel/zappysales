@@ -1,5 +1,6 @@
 package com.zappysales.backend.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import java.util.UUID;
 /**
  * Response DTO representing user details and associated addresses.
  */
+@Schema(description = "Response payload representing detailed user registration profile")
 @Getter
 @Setter
 @Builder
@@ -20,11 +22,19 @@ import java.util.UUID;
 @ToString
 public class UserResponse {
 
+    @Schema(description = "Unique UUID identifier of the user", example = "11111111-1111-1111-1111-111111111111")
     private UUID id;
+
+    @Schema(description = "Registered email address of the user", example = "emmanuel.ngane@example.cm")
     private String email;
+
+    @Schema(description = "First name of the user", example = "Emmanuel")
     private String firstName;
+
+    @Schema(description = "Last name of the user", example = "Ngane")
     private String lastName;
 
+    @Schema(description = "List of addresses associated with this user profile")
     @Getter(lombok.AccessLevel.NONE)
     @Setter(lombok.AccessLevel.NONE)
     @Builder.Default

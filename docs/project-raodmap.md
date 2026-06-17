@@ -75,6 +75,6 @@
 ---
 
 ## Phase 8 - Optional Enhancements
-- [ ] Swagger/OpenAPI
+- [x] Swagger/OpenAPI
 - [ ] Docker
 - [ ] CI Pipeline

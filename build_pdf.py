@@ -3,7 +3,6 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
-from reportlab.lib.units import inch
 
 def build_pdf():
     pdf_filename = "Ngane_Emmanuel_AssessmentForFullStackDeveloper_2026-06-17.pdf"
@@ -25,8 +24,8 @@ def build_pdf():
         'DocTitle',
         parent=styles['Heading1'],
         fontName='Helvetica-Bold',
-        fontSize=22,
-        leading=26,
+        fontSize=20,
+        leading=24,
         textColor=colors.HexColor('#112233'),
         spaceAfter=10
     )
@@ -38,18 +37,18 @@ def build_pdf():
         fontSize=11,
         leading=15,
         textColor=colors.HexColor('#556677'),
-        spaceAfter=20
+        spaceAfter=15
     )
     
     h1_style = ParagraphStyle(
         'SectionHeading',
         parent=styles['Heading2'],
         fontName='Helvetica-Bold',
-        fontSize=14,
-        leading=17,
+        fontSize=12,
+        leading=15,
         textColor=colors.HexColor('#112233'),
-        spaceBefore=14,
-        spaceAfter=8,
+        spaceBefore=12,
+        spaceAfter=6,
         keepWithNext=True
     )
     
@@ -57,42 +56,42 @@ def build_pdf():
         'BodyTextCustom',
         parent=styles['BodyText'],
         fontName='Helvetica',
-        fontSize=10,
-        leading=14,
+        fontSize=9.5,
+        leading=13.5,
         textColor=colors.HexColor('#333333'),
-        spaceAfter=6
+        spaceAfter=5
     )
 
     bullet_style = ParagraphStyle(
         'BulletCustom',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=10,
-        leading=14,
-        leftIndent=20,
+        fontSize=9,
+        leading=13,
+        leftIndent=15,
         firstLineIndent=-10,
         textColor=colors.HexColor('#333333'),
-        spaceAfter=4
+        spaceAfter=3
     )
     
     code_style = ParagraphStyle(
         'CodeStyle',
         parent=styles['Code'],
         fontName='Courier',
-        fontSize=9,
-        leading=12,
+        fontSize=8,
+        leading=10,
         textColor=colors.HexColor('#222222'),
         backColor=colors.HexColor('#F4F4F5'),
-        borderPadding=6,
-        spaceAfter=8
+        borderPadding=5,
+        spaceAfter=6
     )
     
     meta_style = ParagraphStyle(
         'MetadataStyle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=10,
-        leading=14,
+        fontSize=9.5,
+        leading=13.5,
         textColor=colors.HexColor('#112233')
     )
 
@@ -113,52 +112,51 @@ def build_pdf():
     t.setStyle(TableStyle([
         ('ALIGN', (0,0), (-1,-1), 'LEFT'),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 3),
-        ('TOPPADDING', (0,0), (-1,-1), 3),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+        ('TOPPADDING', (0,0), (-1,-1), 2),
     ]))
     story.append(t)
-    story.append(Spacer(1, 15))
-    
-    # Divider Rule Line
-    story.append(Table([[""]], colWidths=[500], rowHeights=[2], style=TableStyle([
-        ('LINEABOVE', (0,0), (-1,-1), 1, colors.HexColor('#CCCCCC'))
-    ])))
     story.append(Spacer(1, 10))
     
-    # 1. Executive Summary
-    story.append(Paragraph("1. Executive Summary", h1_style))
+    # Divider Rule Line
+    story.append(Table([[""]], colWidths=[500], rowHeights=[1.5], style=TableStyle([
+        ('LINEABOVE', (0,0), (-1,-1), 1, colors.HexColor('#CCCCCC'))
+    ])))
+    story.append(Spacer(1, 6))
+    
+    # 1. Overview
+    story.append(Paragraph("1. Overview", h1_style))
     story.append(Paragraph(
-        "ZappySales is a production-quality, lightweight full-stack administrative application designed to allow "
-        "system administrators to view, search, paginate, and modify user registration profiles and their associated "
-        "shipping/billing addresses.", body_style))
+        "ZappySales is a full-stack, production-quality User and Address Management application built with Spring Boot and React. "
+        "It acts as a lightweight administrative directory that allows system administrators to view, search, "
+        "paginate, and modify user profiles and their associated shipping/billing addresses.", body_style))
     story.append(Paragraph(
         "The application follows the <b>Aggregate Root</b> pattern: the <code>User</code> is the parent record, "
         "and multiple <code>Address</code> items are managed directly within the User's context (a 1-to-many relationship).", body_style))
     story.append(Paragraph(
         "This assessment implementation goes beyond a minimal proof-of-concept by introducing:", body_style))
     story.append(Paragraph("&bull; <b>Server-side Pagination and Case-insensitive Substring Search</b> (supporting enterprise-scale data sets).", bullet_style))
-    story.append(Paragraph("&bull; <b>Environment-driven properties</b> with standard fallback defaults for cloud-native deployment.", bullet_style))
+    story.append(Paragraph("&bull; <b>Environment-driven properties</b> with standard defaults for cloud-native deployment.", bullet_style))
     story.append(Paragraph("&bull; <b>IP-based in-memory Rate Limiting / Request Throttling</b> on the backend.", bullet_style))
     story.append(Paragraph("&bull; <b>35 Vitest + React Testing Library (RTL) tests</b> on the frontend.", bullet_style))
     story.append(Paragraph("&bull; <b>47 JUnit 5 + Mockito + MockMvc unit/integration tests</b> on the backend.", bullet_style))
+    story.append(Paragraph("&bull; <b>OpenAPI/Swagger Interactive Console</b> for easy endpoint verification.", bullet_style))
     
-    # 2. Technical Stack & Architecture
-    story.append(Paragraph("2. Technical Stack & Architecture", h1_style))
-    story.append(Paragraph("<b>Backend (Java / Spring Boot)</b>", body_style))
-    story.append(Paragraph("The backend is structured around a clean, layered architectural design (<b>Separation of Concerns</b>):", body_style))
-    story.append(Paragraph("<code>UserController &rarr; UserService / UserServiceImpl &rarr; UserRepository / InMemoryUserRepository</code>", code_style))
+    # 2. Technologies
+    story.append(Paragraph("2. Technologies", h1_style))
+    story.append(Paragraph("<b>Backend (Java 21 / Spring Boot)</b>", body_style))
     story.append(Paragraph("&bull; <b>Language/Framework:</b> Java 21, Spring Boot v4.1.0.", bullet_style))
-    story.append(Paragraph("&bull; <b>Thread-safe Runtime Store:</b> Managed in-memory via <code>ConcurrentHashMap</code> with defensive cloning during reads/writes to isolate repository state.", bullet_style))
-    story.append(Paragraph("&bull; <b>Data Transfer Objects (DTOs):</b> Strong contracts (<code>CreateUserRequest</code>, <code>UserResponse</code>, <code>AddressResponse</code>, etc.) separate the external API model from internal domain models.", bullet_style))
-    story.append(Paragraph("&bull; <b>API Validation:</b> Jakarta Bean constraints (<code>@Email</code>, <code>@Size</code>, <code>@NotBlank</code>) integrated with custom HTML input sanitizers (<code>@SanitizedString</code>).", bullet_style))
-    story.append(Paragraph("&bull; <b>Security & Throttling:</b> Custom servlet filter applying security headers (<code>X-Content-Type-Options</code>, <code>X-Frame-Options</code>, <code>Referrer-Policy</code>) and IP-based sliding-window request rate limiting.", bullet_style))
+    story.append(Paragraph("&bull; <b>Thread-safe Runtime Store:</b> Managed in-memory via <code>ConcurrentHashMap</code> with defensive cloning during reads and writes to isolate repository state.", bullet_style))
+    story.append(Paragraph("&bull; <b>Data Transfer Objects (DTOs):</b> Strong contracts separate the external API model from internal domain models.", bullet_style))
+    story.append(Paragraph("&bull; <b>API Validation:</b> Jakarta Bean constraints integrated with custom HTML input sanitizers (<code>@SanitizedString</code>).", bullet_style))
+    story.append(Paragraph("&bull; <b>Security & Throttling:</b> Custom servlet filter applying security headers and IP-based rate limiting filter.", bullet_style))
     
-    story.append(Spacer(1, 5))
-    story.append(Paragraph("<b>Frontend (React / TypeScript)</b>", body_style))
+    story.append(Spacer(1, 3))
+    story.append(Paragraph("<b>Frontend (React 19 / TypeScript)</b>", body_style))
     story.append(Paragraph("&bull; <b>Framework & Tooling:</b> React 19, Vite 8, TypeScript 6.", bullet_style))
     story.append(Paragraph("&bull; <b>Styling System:</b> TailwindCSS v4.0 for utility layout grids and layout properties combined with Material-UI (MUI) v9 for UI component blocks.", bullet_style))
     story.append(Paragraph("&bull; <b>State Management:</b> Zustand state store (<code>userStore.ts</code>) providing reactive global flow with minimal boilerplate.", bullet_style))
-    story.append(Paragraph("&bull; <b>Data Fetching:</b> Standardized Axios client wrapper (<code>client.ts</code>) with custom interceptors to map error codes and normalize response structures.", bullet_style))
+    story.append(Paragraph("&bull; <b>Data Fetching:</b> Standardized Axios client wrapper with custom request/response interceptors.", bullet_style))
     
     # Page Break for layout cleanliness
     story.append(PageBreak())
@@ -175,7 +173,7 @@ def build_pdf():
         "│   ├── src/\n"
         "│   │   ├── api/                   # Centralized Axios Client\n"
         "│   │   ├── app/routes/            # URL Routing Layouts\n"
-        "│   │   ├── features/users/        # Pages, Components, Stores, and Hooks\n"
+        "│   │   ├── features/users/        # Feature Pages, Components, Stores, and Hooks\n"
         "│   │   └── shared/                # Common Page Skeletons, Layouts, and Spinners\n"
         "│   ├── test/                      # Vitest Setup Configs\n"
         "│   └── vitest.config.ts           # Vitest Config File\n"
@@ -183,12 +181,26 @@ def build_pdf():
     )
     story.append(Paragraph(dir_text.replace("\n", "<br/>").replace(" ", "&nbsp;"), code_style))
     
-    # 4. Environment & Prerequisites
-    story.append(Paragraph("4. Environment & Prerequisites", h1_style))
-    story.append(Paragraph("&bull; **Java Development Kit (JDK) 21**", bullet_style))
-    story.append(Paragraph("&bull; **Node.js (v18 or higher)** and **npm**", bullet_style))
-    story.append(Paragraph("&bull; **Apache Maven** (or use the packaged <code>./mvnw</code> wrapper)", bullet_style))
-    story.append(Spacer(1, 5))
+    # 4. Features
+    story.append(Paragraph("4. Features", h1_style))
+    story.append(Paragraph("&bull; <b>User CRUD</b> - Full capability to view, register, edit, and delete user profiles.", bullet_style))
+    story.append(Paragraph("&bull; <b>Address CRUD</b> - Management of multiple addresses associated with each user (1-to-many relationship).", bullet_style))
+    story.append(Paragraph("&bull; <b>Server-side Pagination</b> - Seamless pagination on data grids to support enterprise-scale databases.", bullet_style))
+    story.append(Paragraph("&bull; <b>Search</b> - Case-insensitive substring search matching email, first name, or last name.", bullet_style))
+    story.append(Paragraph("&bull; <b>Input Sanitization</b> - Custom <code>@SanitizedString</code> annotation to prevent XSS.", bullet_style))
+    story.append(Paragraph("&bull; <b>Rate Limiting</b> - In-memory sliding-window IP-based API throttling filter.", bullet_style))
+    story.append(Paragraph("&bull; <b>Security Headers</b> - Custom response headers (X-Content-Type-Options, X-Frame-Options, Referrer-Policy).", bullet_style))
+    story.append(Paragraph("&bull; <b>Swagger API Docs</b> - Automated interactive developer UI console.", bullet_style))
+    story.append(Paragraph("&bull; <b>Unit and Integration Tests</b> - Comprehensive test coverage (47 backend, 35 frontend).", bullet_style))
+    
+    # 5. Architecture
+    story.append(Paragraph("5. Architecture", h1_style))
+    story.append(Paragraph("<b>Backend:</b> <code>Controller &rarr; Service &rarr; Repository &rarr; In-memory Storage</code>", code_style))
+    story.append(Paragraph("<b>Frontend:</b> <code>Pages &rarr; Hooks &rarr; Store &rarr; Services &rarr; Axios Client &rarr; REST API</code>", code_style))
+    
+    # 6. Environment & Prerequisites
+    story.append(Paragraph("6. Environment & Prerequisites", h1_style))
+    story.append(Paragraph("<b>Prerequisites:</b> JDK 21, Node.js (v18+), Maven.", body_style))
     
     # Table of Environment variables
     table_data = [
@@ -204,28 +216,40 @@ def build_pdf():
         ('ALIGN', (0,0), (-1,-1), 'LEFT'),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#DDDDDD')),
-        ('TOPPADDING', (0,0), (-1,-1), 5),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 5),
+        ('TOPPADDING', (0,0), (-1,-1), 4),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
     ]))
     story.append(vt)
-    story.append(Spacer(1, 8))
-    story.append(Paragraph("<b>Frontend .env Config:</b> Create <code>frontend/.env</code> with: <code>VITE_API_BASE_URL=http://localhost:8080/api/v1</code>", body_style))
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("<b>Frontend Configuration:</b> Create <code>frontend/.env</code> with: <code>VITE_API_BASE_URL=http://localhost:8080/api/v1</code>", body_style))
     
-    # 5. Build, Test, and Execution Instructions
-    story.append(Paragraph("5. Build, Test, and Execution Instructions", h1_style))
-    story.append(Paragraph("<b>Backend Commands (in backend/ folder):</b>", body_style))
-    story.append(Paragraph("Run Tests: <code>mvn test</code><br/>Start Application: <code>./mvnw spring-boot:run</code>", code_style))
-    story.append(Paragraph("<b>Frontend Commands (in frontend/ folder):</b>", body_style))
-    story.append(Paragraph("Install Dependencies: <code>npm install</code><br/>Run Tests: <code>npm run test</code><br/>Production Build: <code>npm run build</code><br/>Start Dev Server: <code>npm run dev</code>", code_style))
+    # Page Break for layout cleanliness
+    story.append(PageBreak())
     
-    # 6. Design Choices: \"User -> Address\" Flow
-    story.append(Paragraph("6. Design Choices: \"User &rarr; Address\" Flow", h1_style))
-    story.append(Paragraph("&bull; <b>Aggregate Root UI:</b> Administrators load user list page with server pagination. Clicking details loads the User profile detail page.", bullet_style))
+    # 7. Setup Instructions
+    story.append(Paragraph("7. Setup Instructions", h1_style))
+    story.append(Paragraph("<b>Backend (in backend/ folder):</b>", body_style))
+    story.append(Paragraph("mvn clean install<br/>./mvnw spring-boot:run", code_style))
+    story.append(Paragraph("<b>Frontend (in frontend/ folder):</b>", body_style))
+    story.append(Paragraph("npm install<br/>npm run dev<br/>npm run build", code_style))
+    
+    # 8. Testing Instructions
+    story.append(Paragraph("8. Testing Instructions", h1_style))
+    story.append(Paragraph("<b>Backend:</b> <code>mvn test</code> (in <code>backend/</code> folder)", code_style))
+    story.append(Paragraph("<b>Frontend:</b> <code>npm run test</code> (in <code>frontend/</code> folder)", code_style))
+    
+    # 9. Swagger Documentation
+    story.append(Paragraph("9. Swagger Documentation", h1_style))
+    story.append(Paragraph("Swagger UI console is available locally at: <code>http://localhost:8080/swagger-ui/index.html</code>", code_style))
+    
+    # 10. Design Choices: \"User -> Address\" Flow
+    story.append(Paragraph("10. Design Choices: \"User &rarr; Address\" Flow", h1_style))
+    story.append(Paragraph("&bull; <b>Aggregate Root UI:</b> Administrators open the main user directory list page and navigate to a dedicated detail page, keeping the detail management focused.", bullet_style))
     story.append(Paragraph("&bull; <b>In-Context Modals:</b> CRUD tasks (edit profile, CRUD addresses) trigger popup dialogs in-context on the detail view rather than redirecting away, yielding a smooth single-dashboard flow.", bullet_style))
     story.append(Paragraph("&bull; <b>Zustand Sync:</b> Successful changes trigger local store mutations rather than forcing database refetches, reducing network utilization.", bullet_style))
     
-    # 7. Test Suite Validation Results
-    story.append(Paragraph("7. Test Suite Validation Results", h1_style))
+    # 11. Test Suite Validation Results
+    story.append(Paragraph("11. Test Suite Validation Results", h1_style))
     story.append(Paragraph("&bull; <b>Backend (47 tests passed):</b> Checked repository deep cloning, controller endpoints, validation, and full user integration workflows.", bullet_style))
     story.append(Paragraph("&bull; <b>Frontend (35 tests passed):</b> Checked table renders, dialog state triggers, Zustand stores, and routing page displays.", bullet_style))
     

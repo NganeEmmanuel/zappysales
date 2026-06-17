@@ -8,9 +8,9 @@
 
 ---
 
-## 1. Executive Summary
+## 1. Overview
 
-ZappySales is a production-quality, lightweight full-stack administrative application designed to allow system administrators to view, search, paginate, and modify user registration profiles and their associated shipping/billing addresses.
+ZappySales is a full-stack, production-quality User and Address Management application built with Spring Boot and React. It acts as a lightweight administrative directory that allows system administrators to view, search, paginate, and modify user profiles and their associated shipping/billing addresses.
 
 The application follows the **Aggregate Root** pattern: the `User` is the parent record, and multiple `Address` items are managed directly within the User's context (a 1-to-many relationship). 
 
@@ -20,20 +20,14 @@ This assessment implementation goes beyond a minimal proof-of-concept by introdu
 * **IP-based in-memory Rate Limiting / Request Throttling** on the backend.
 * **35 Vitest + React Testing Library (RTL) tests** on the frontend.
 * **47 JUnit 5 + Mockito + MockMvc unit/integration tests** on the backend.
+* **OpenAPI/Swagger Interactive Console** for easy endpoint verification.
 
 ---
 
-## 2. Technical Stack & Architecture
+## 2. Technologies
 
-### Backend (Java / Spring Boot)
-The backend is structured around a clean, layered architectural design (**Separation of Concerns**):
-```text
-UserController (REST API endpoints & Validation check)
-       ↓
-UserService / UserServiceImpl (Business logic, pagination state, and DTO mappings)
-       ↓
-UserRepository / InMemoryUserRepository (Thread-safe ConcurrentHashMap storage)
-```
+### Backend (Java 21 / Spring Boot)
+The backend is structured around a clean, layered architectural design representing separation of concerns:
 * **Language/Framework:** Java 21, Spring Boot v4.1.0.
 * **Thread-safe Runtime Store:** Managed in-memory via `ConcurrentHashMap` with defensive cloning during reads and writes to isolate repository state.
 * **Data Transfer Objects (DTOs):** Strong contracts (`CreateUserRequest`, `UserResponse`, `AddressResponse`, etc.) separate the external API model from internal domain models.
@@ -41,19 +35,20 @@ UserRepository / InMemoryUserRepository (Thread-safe ConcurrentHashMap storage)
 * **Security & Throttling:**
   * Custom servlet filter applying security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`).
   * Lightweight IP-based rate limiting filter using a sliding-window tracker (`ConcurrentHashMap`).
+  * OpenAPI/Swagger (`springdoc-openapi`) integration.
 
-### Frontend (React / TypeScript)
+### Frontend (React 19 / TypeScript)
 The client follows a feature-driven folder structure for scalability and modularity:
 * **Framework & Tooling:** React 19, Vite 8, TypeScript 6.
 * **Styling System:** TailwindCSS v4.0 for utility layout grids and layout properties combined with Material-UI (MUI) v9 for UI component blocks (Buttons, Tables, TextFields, Dialogs).
 * **State Management:** Zustand state store (`userStore.ts`) providing reactive global flow with minimal boilerplate.
 * **Data Fetching:** Standardized Axios client wrapper (`client.ts`) with custom request/response interceptors to map error codes and normalize response structures.
+* **Component Testing:** Vitest and React Testing Library setup for modular UI verification.
 
 ---
 
 ## 3. Directory Layout
 
-### Root Structure
 ```text
 ZappySales/
 ├── backend/                       # Spring Boot Project
@@ -75,7 +70,54 @@ ZappySales/
 
 ---
 
-## 4. Environment & Prerequisites
+## 4. Features
+
+* **User CRUD** - Full capability to view, register, edit, and delete user profiles.
+* **Address CRUD** - Management of multiple addresses associated with each user (1-to-many relationship).
+* **Server-side Pagination** - Seamless pagination on data grids to support enterprise-scale databases.
+* **Search** - Case-insensitive substring search matching email, first name, or last name.
+* **Validation** - Input sanity checks (e.g. Email validity, field sizes, mandatory inputs).
+* **Input Sanitization** - Custom `@SanitizedString` annotation to prevent XSS.
+* **Rate Limiting** - In-memory sliding-window IP-based API throttling filter.
+* **Security Headers** - Custom response headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`).
+* **Snackbar Notifications** - Clean user-facing success and error notifications.
+* **Global Exception Handling** - Structured JSON error payloads on failures.
+* **Swagger API Docs** - Automated interactive developer UI console.
+* **Unit and Integration Tests** - Comprehensive test coverage (47 backend, 35 frontend).
+
+---
+
+## 5. Architecture
+
+### Backend Architectural Layer
+```text
+Controller (REST API Endpoints & Request Validation)
+       ↓
+Service (Business Logic, Pagination, and DTO Mappings)
+       ↓
+Repository (Data Access Abstraction)
+       ↓
+In-memory storage (Thread-safe ConcurrentHashMap Store)
+```
+
+### Frontend Architectural Layer
+```text
+Pages (Route views, e.g., Directory List, Details Dashboard)
+  ↓
+Hooks (Custom React hooks, binding UI to stores)
+  ↓
+Store (Zustand State Store)
+  ↓
+Services (API Service modules)
+  ↓
+Axios Client (HTTP instance, request/response interceptors)
+  ↓
+REST API (Backend server)
+```
+
+---
+
+## 6. Environment & Prerequisites
 
 ### Prerequisites
 1. **Java Development Kit (JDK) 21**
@@ -84,14 +126,17 @@ ZappySales/
 
 ### Configuration
 
-#### Backend
-Configure backend settings (Port, CORS, and Rate Limiting) via environment variables or command-line properties:
-* `PORT` (Default: `8080`)
-* `ALLOWED_ORIGINS` (Default: `http://localhost:3000,http://localhost:5173`)
-* `RATE_LIMIT_CAPACITY` (Default: `100` requests per window)
-* `RATE_LIMIT_TIME_WINDOW_SECONDS` (Default: `60` seconds)
+#### Backend Environment Variables
+Configure backend settings via system environment variables or command-line properties:
 
-#### Frontend
+| Environment Variable | Description | Default Value |
+| :--- | :--- | :---: |
+| `PORT` | The HTTP port the backend server listens on | `8080` |
+| `ALLOWED_ORIGINS` | Comma-separated list of permitted CORS origins | `http://localhost:3000,http://localhost:5173` |
+| `RATE_LIMIT_CAPACITY` | Max API requests allowed per client IP within the window | `100` |
+| `RATE_LIMIT_TIME_WINDOW_SECONDS` | Throttling time window in seconds | `60` |
+
+#### Frontend Configuration
 Create a `frontend/.env` file with the following variable to link React to the backend server:
 ```env
 VITE_API_BASE_URL=http://localhost:8080/api/v1
@@ -99,47 +144,68 @@ VITE_API_BASE_URL=http://localhost:8080/api/v1
 
 ---
 
-## 5. Build, Test, and Execution Instructions
+## 7. Setup Instructions
 
-### Backend Commands
-Navigate to the `backend/` folder:
-```bash
-cd backend
-```
-* **Run Tests:**
-  ```bash
-  mvn test
-  ```
-* **Start Application:**
-  ```bash
-  ./mvnw spring-boot:run
-  ```
+### Backend Setup
+1. Navigate to the `backend/` folder:
+   ```bash
+   cd backend
+   ```
+2. Build the project and install dependencies:
+   ```bash
+   mvn clean install
+   ```
+3. Start the application using Maven:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+   *(Or `mvn spring-boot:run`)*
 
-### Frontend Commands
-Navigate to the `frontend/` folder:
-```bash
-cd frontend
-```
-* **Install Dependencies:**
-  ```bash
-  npm install
-  ```
-* **Run Tests:**
-  ```bash
-  npm run test
-  ```
-* **Production Build:**
-  ```bash
-  npm run build
-  ```
-* **Start Dev Server:**
-  ```bash
-  npm run dev
-  ```
+### Frontend Setup
+1. Navigate to the `frontend/` folder:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Build the production application bundle:
+   ```bash
+   npm run build
+   ```
 
 ---
 
-## 6. Design Choices: "User → Address" Flow
+## 8. Testing Instructions
+
+### Backend Tests
+Navigate to the `backend/` folder and execute the test command:
+```bash
+mvn test
+```
+
+### Frontend Tests
+Navigate to the `frontend/` folder and execute the test command:
+```bash
+npm run test
+```
+
+---
+
+## 9. Swagger Documentation
+
+The interactive Swagger UI API documentation console is available when the backend server is running locally:
+* **Swagger UI URL:** [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+* **OpenAPI Specs (JSON):** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
+---
+
+## 10. Design Choices: "User → Address" Flow
 
 Our user-to-address flow was structured to follow administrative best practices:
 1. **Aggregate Root UI:**
@@ -150,12 +216,11 @@ Our user-to-address flow was structured to follow administrative best practices:
    * Instead of redirecting administrators to separate creation pages (which disrupts navigation), all CRUD modifications (edit profile, add address, edit address, delete address) open inline **MUI Dialogs** on the detail page.
    * This provides a clean single-page dashboard experience and minimizes navigation steps.
 3. **State Sync & Centralized Store:**
-   * The custom hook `useUsers.ts` wraps the Zustand `userStore.ts` store.
    * All API requests are centralized. On successful address modifications, the store updates the user profile record locally in memory rather than forcing a full page refetch, optimizing network traffic.
 
 ---
 
-## 7. Test Suite Validation Results
+## 11. Test Suite Validation Results
 
 ### Backend Validation (JUnit 5 + Mockito + MockMvc)
 **47 backend tests passed successfully** covering:
@@ -171,8 +236,6 @@ Our user-to-address flow was structured to follow administrative best practices:
 * **Pages:** `UsersPage` (search, pagination) and `UserDetailPage` (profile cards, address grids, and dialog toggles).
 
 ---
-
-## 8. Candidate Signature
 
 **Ngane Emmanuel**  
 Full Stack Developer  
