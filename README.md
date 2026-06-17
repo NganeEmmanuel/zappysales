@@ -65,7 +65,7 @@ The application demonstrates:
 
 ## Backend
 
-* Java 17+
+* Java 21
 * Spring Boot
 * Spring Validation
 * Spring Web
@@ -112,40 +112,47 @@ This flow was chosen because it mirrors common CRM and administrative systems wh
 
 ---
 
-# Environment Configuration
+# Prerequisites
 
-## Backend
-
-Create:
-
-```bash
-backend/.env
-```
-
-Example:
-
-```env
-SERVER_PORT=8080
-
-ALLOWED_ORIGINS=http://localhost:5173
-
-RATE_LIMIT_REQUESTS=100
-
-RATE_LIMIT_WINDOW_MINUTES=1
-```
+Before setting up the project, make sure you have the following installed on your machine:
+* **Java Development Kit (JDK) 21**
+* **Node.js (v18 or higher)** and **npm**
 
 ---
 
-## Frontend
+# Environment Configuration
 
-Create:
+## Backend Configuration
+The Spring Boot backend can be configured using standard system environment variables or CLI arguments. The following settings are supported:
 
-```bash
-frontend/.env
-```
+| Environment Variable | Description | Default Value |
+| --- | --- | --- |
+| `PORT` | The HTTP port the backend server listens on | `8080` |
+| `ALLOWED_ORIGINS` | Comma-separated list of permitted CORS origins | `http://localhost:3000,http://localhost:5173` |
+| `RATE_LIMIT_CAPACITY` | Max API requests allowed per client IP within the time window | `100` |
+| `RATE_LIMIT_TIME_WINDOW_SECONDS` | Throttling time window in seconds | `60` |
 
-Example:
+### Setting variables:
+* **Via System Env (e.g. Linux/macOS):**
+  ```bash
+  export PORT=8080
+  export ALLOWED_ORIGINS=http://localhost:5173
+  ```
+* **Via Maven Command Line Properties:**
+  You can pass properties directly when starting Spring Boot:
+  ```bash
+  mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=9090 --app.cors.allowed-origins=http://localhost:5173"
+  ```
 
+---
+
+## Frontend Configuration
+To connect the React client to the backend API, create an environment configuration file:
+
+### File Path:
+Create a file at `frontend/.env`
+
+### Required Variable:
 ```env
 VITE_API_BASE_URL=http://localhost:8080/api/v1
 ```
