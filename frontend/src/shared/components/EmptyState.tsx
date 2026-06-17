@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 
 interface EmptyStateProps {
   title: string;
@@ -20,34 +20,20 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   onAction
 }) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        p: 6,
-        textAlign: 'center',
-        border: '2px dashed rgba(255, 255, 255, 0.1)',
-        borderRadius: 2,
-        bgcolor: 'background.paper',
-        my: 4,
-        gap: 2
-      }}
-    >
-      {icon && <Box sx={{ fontSize: 48, color: 'text.secondary', opacity: 0.8 }}>{icon}</Box>}
-      <Typography variant="h6" sx={{ fontWeight: 600 }}>
+    <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-white/10 rounded-lg bg-[#172a45] my-8 gap-4">
+      {icon && <div className="text-[48px] text-slate-400 opacity-80">{icon}</div>}
+      <Typography variant="h6" className="font-semibold text-white">
         {title}
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ maxW: '400px' }}>
+      <Typography variant="body2" color="text.secondary" className="max-w-[400px]">
         {description}
       </Typography>
       {actionText && onAction && (
-        <Button variant="contained" color="primary" onClick={onAction} sx={{ mt: 1 }}>
+        <Button variant="contained" color="primary" onClick={onAction} className="mt-2">
           {actionText}
         </Button>
       )}
-    </Box>
+    </div>
   );
 };
 

@@ -25,11 +25,11 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 }) => {
   return (
     <Dialog open={open} onClose={onCancel}>
-      <DialogTitle sx={{ fontWeight: 600 }}>{title}</DialogTitle>
+      <DialogTitle className="font-semibold">{title}</DialogTitle>
       <DialogContent>
         <DialogContentText color="text.secondary">{message}</DialogContentText>
       </DialogContent>
-      <DialogActions sx={{ p: 2 }}>
+      <DialogActions className="p-4">
         <Button onClick={onCancel} variant="text" color="inherit">
           {cancelText}
         </Button>

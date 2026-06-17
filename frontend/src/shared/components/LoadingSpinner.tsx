@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, Typography } from '@mui/material';
 
 interface LoadingSpinnerProps {
   message?: string;
@@ -14,22 +14,15 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   minHeight = '200px' 
 }) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight,
-        gap: 2,
-        width: '100%'
-      }}
+    <div
+      className="flex flex-col items-center justify-center gap-4 w-full"
+      style={{ minHeight }}
     >
       <CircularProgress color="primary" />
       <Typography variant="body2" color="text.secondary">
         {message}
       </Typography>
-    </Box>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 interface PageHeaderProps {
   title: string;
@@ -12,28 +12,19 @@ interface PageHeaderProps {
  */
 export const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, action }) => {
   return (
-    <Box 
-      sx={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'flex-start',
-        mb: 4,
-        flexWrap: 'wrap',
-        gap: 2
-      }}
-    >
-      <Box>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 700, color: 'text.primary' }}>
+    <div className="flex justify-between items-start mb-8 flex-wrap gap-4">
+      <div>
+        <Typography variant="h4" component="h1" className="font-bold text-white">
           {title}
         </Typography>
         {subtitle && (
-          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
+          <Typography variant="body1" color="text.secondary" className="mt-1">
             {subtitle}
           </Typography>
         )}
-      </Box>
-      {action && <Box sx={{ display: 'flex', gap: 1 }}>{action}</Box>}
-    </Box>
+      </div>
+      {action && <div className="flex gap-2">{action}</div>}
+    </div>
   );
 };
 

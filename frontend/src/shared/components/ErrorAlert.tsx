@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, AlertTitle, Button, Box } from '@mui/material';
+import { Alert, AlertTitle, Button } from '@mui/material';
 
 interface ErrorAlertProps {
   title?: string;
@@ -16,7 +16,7 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({
   onRetry
 }) => {
   return (
-    <Box sx={{ width: '100%', my: 2 }}>
+    <div className="w-full my-4">
       <Alert 
         severity="error" 
         action={
@@ -30,7 +30,7 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({
         <AlertTitle>{title}</AlertTitle>
         {message}
       </Alert>
-    </Box>
+    </div>
   );
 };
 

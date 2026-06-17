@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Container, Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 const darkTheme = createTheme({
@@ -26,19 +26,19 @@ export const AppLayout: React.FC = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: 'background.default' }}>
-        <AppBar position="static" elevation={0} sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.12)', bgcolor: 'background.paper' }}>
+      <div className="flex flex-col min-h-screen bg-[#0a192f]">
+        <AppBar position="static" elevation={0} className="border-b border-white/10 bg-[#172a45]">
           <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 700, letterSpacing: '0.5px' }}>
+            <Typography variant="h6" component="div" className="flex-grow font-bold tracking-wide">
               ZappySales
             </Typography>
           </Toolbar>
         </AppBar>
 
-        <Container component="main" sx={{ flexGrow: 1, py: 4, display: 'flex', flexDirection: 'column' }}>
+        <Container component="main" className="flex-grow py-8 flex flex-col">
           <Outlet />
         </Container>
-      </Box>
+      </div>
     </ThemeProvider>
   );
 };

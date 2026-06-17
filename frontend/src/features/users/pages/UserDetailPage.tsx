@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Paper, Button } from '@mui/material';
+import { Typography, Paper, Button } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 
 /**
@@ -10,19 +10,19 @@ export const UserDetailPage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Paper sx={{ p: 4, bgcolor: 'background.paper', borderRadius: 2 }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+    <div className="flex flex-col gap-6">
+      <Paper className="p-8 bg-[#172a45] rounded-lg border border-white/5">
+        <Typography variant="h4" component="h1" className="font-semibold mb-4 text-white">
           User Details
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography variant="body1" color="text.secondary" className="mb-4">
           This is a placeholder for the User detail and Address management view. User ID: <strong>{id}</strong>
         </Typography>
         <Button variant="outlined" color="primary" onClick={() => navigate('/users')}>
           Back to Directory
         </Button>
       </Paper>
-    </Box>
+    </div>
   );
 };
 
