@@ -186,4 +186,34 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.addresses").isEmpty());
     }
+
+    @Test
+    void createUser_UnTrimmedFirstName_Returns400() throws Exception {
+        // Arrange
+        CreateUserRequest request = new CreateUserRequest("john@example.com", " John", "Doe", new ArrayList<>());
+
+        // Act & Assert
+        mockMvc.perform(post("/api/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("Bad Request"))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Validation failed")));
+    }
+
+    @Test
+    void createUser_UnsafeScriptInEmailStrict_Returns400() throws Exception {
+        // Arrange: Email containing script tag should be blocked by SanitizedString(strict = true)
+        CreateUserRequest request = new CreateUserRequest("<script>alert(1)</script>@example.com", "John", "Doe", new ArrayList<>());
+
+        // Act & Assert
+        mockMvc.perform(post("/api/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("Bad Request"))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Validation failed")));
+    }
 }

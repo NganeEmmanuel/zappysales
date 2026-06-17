@@ -2,6 +2,7 @@ package com.zappysales.backend.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import com.zappysales.backend.validation.SanitizedString;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,21 +21,26 @@ public class UpdateAddressRequest {
 
     @NotBlank(message = "Street is required")
     @Size(max = 150, message = "Street must not exceed 150 characters")
+    @SanitizedString
     private String street;
 
     @NotBlank(message = "City is required")
     @Size(max = 100, message = "City must not exceed 100 characters")
+    @SanitizedString
     private String city;
 
     @NotBlank(message = "State is required")
     @Size(max = 100, message = "State must not exceed 100 characters")
+    @SanitizedString
     private String state;
 
     @NotBlank(message = "Country is required")
     @Size(max = 100, message = "Country must not exceed 100 characters")
+    @SanitizedString
     private String country;
 
     @NotBlank(message = "Postal code is required")
     @Size(max = 20, message = "Postal code must not exceed 20 characters")
+    @SanitizedString
     private String postalCode;
 }
