@@ -11,13 +11,13 @@
 ---
 
 ## Phase 1 - Backend Foundation
-- [ ] Spring Boot setup
-- [ ] Environment configuration
-- [ ] Domain models
-- [ ] DTOs
-- [ ] Repository layer
-- [ ] Service layer
-- [ ] Mapper layer
+- [x] Spring Boot setup
+- [x] Environment configuration
+- [x] Domain models
+- [x] DTOs
+- [x] Repository layer
+- [x] Service layer
+- [x] Mapper layer
 
 ---
 
