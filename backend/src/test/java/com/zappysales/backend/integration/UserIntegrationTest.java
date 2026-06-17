@@ -49,16 +49,16 @@ class UserIntegrationTest {
         mockMvc.perform(get("/api/v1/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(3))
-                .andExpect(jsonPath("$.content[0].email").value("john.doe@example.com"))
+                .andExpect(jsonPath("$.content[0].email").value("emmanuel.ngane@example.cm"))
                 .andExpect(jsonPath("$.totalElements").value(3))
                 .andExpect(jsonPath("$.page").value(0))
                 .andExpect(jsonPath("$.size").value(10));
 
-        // 2. Retrieve a specific user (John Doe)
+        // 2. Retrieve a specific user (Emmanuel Ngane)
         UUID johnId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         mockMvc.perform(get("/api/v1/users/{userId}", johnId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value("John"))
+                .andExpect(jsonPath("$.firstName").value("Emmanuel"))
                 .andExpect(jsonPath("$.addresses.length()").value(2));
 
         // 3. Create a new user
@@ -112,15 +112,15 @@ class UserIntegrationTest {
 
     @Test
     void testDuplicateEmailCollisionReturns409() throws Exception {
-        // Try to create a user with email john.doe@example.com (which already exists)
-        CreateUserRequest createRequest = new CreateUserRequest("john.doe@example.com", "John", "Doe", new ArrayList<>());
+        // Try to create a user with email emmanuel.ngane@example.cm (which already exists)
+        CreateUserRequest createRequest = new CreateUserRequest("emmanuel.ngane@example.cm", "Emmanuel", "Ngane", new ArrayList<>());
         mockMvc.perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createRequest)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409))
                 .andExpect(jsonPath("$.error").value("Conflict"))
-                .andExpect(jsonPath("$.message").value("A user with email 'john.doe@example.com' already exists"));
+                .andExpect(jsonPath("$.message").value("A user with email 'emmanuel.ngane@example.cm' already exists"));
     }
 
     @Test

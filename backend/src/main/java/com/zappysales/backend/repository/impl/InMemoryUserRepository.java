@@ -148,78 +148,78 @@ public class InMemoryUserRepository implements UserRepository {
         // User 1
         User user1 = new User(
                 UUID.fromString("11111111-1111-1111-1111-111111111111"),
-                "john.doe@example.com",
-                "John",
-                "Doe",
+                "emmanuel.ngane@example.cm",
+                "Emmanuel",
+                "Ngane",
                 null
         );
         user1.addAddress(new Address(
                 UUID.fromString("11111111-1111-1111-1111-222222222222"),
-                "123 Main St",
-                "Springfield",
-                "IL",
-                "US",
-                "62701"
+                "Rue Tokoto, Bonapriso",
+                "Douala",
+                "Littoral",
+                "Cameroon",
+                "BP 1024"
         ));
         user1.addAddress(new Address(
                 UUID.fromString("11111111-1111-1111-1111-333333333333"),
-                "456 Oak Ave",
-                "Chicago",
-                "IL",
-                "US",
-                "60601"
+                "Avenue Charles de Gaulle",
+                "Yaounde",
+                "Centre",
+                "Cameroon",
+                "BP 2030"
         ));
         save(user1);
 
         // User 2
         User user2 = new User(
                 UUID.fromString("22222222-2222-2222-2222-222222222222"),
-                "jane.smith@example.com",
-                "Jane",
-                "Smith",
+                "jean.mbappe@example.cm",
+                "Jean",
+                "Mbappe",
                 null
         );
         user2.addAddress(new Address(
                 UUID.fromString("22222222-2222-2222-2222-333333333333"),
-                "789 Pine Rd",
-                "Seattle",
-                "WA",
-                "US",
-                "98101"
+                "Molyko Street",
+                "Buea",
+                "South West",
+                "Cameroon",
+                "BP 45"
         ));
         user2.addAddress(new Address(
                 UUID.fromString("22222222-2222-2222-2222-444444444444"),
-                "101 Maple Dr",
-                "Bellevue",
-                "WA",
-                "US",
-                "98004"
+                "Down Beach Road",
+                "Limbe",
+                "South West",
+                "Cameroon",
+                "BP 90"
         ));
         save(user2);
 
         // User 3
         User user3 = new User(
                 UUID.fromString("33333333-3333-3333-3333-333333333333"),
-                "robert.j@example.com",
-                "Robert",
-                "Johnson",
+                "marie.ngo@example.cm",
+                "Marie",
+                "Ngo",
                 null
         );
         user3.addAddress(new Address(
                 UUID.fromString("33333333-3333-3333-3333-444444444444"),
-                "202 Cedar Ln",
-                "Austin",
-                "TX",
-                "US",
-                "78701"
+                "Rue de la Joie, Deido",
+                "Douala",
+                "Littoral",
+                "Cameroon",
+                "BP 88"
         ));
         user3.addAddress(new Address(
                 UUID.fromString("33333333-3333-3333-3333-555555555555"),
-                "303 Birch Blvd",
-                "Dallas",
-                "TX",
-                "US",
-                "75201"
+                "Bastos Area",
+                "Yaounde",
+                "Centre",
+                "Cameroon",
+                "BP 415"
         ));
         save(user3);
     }

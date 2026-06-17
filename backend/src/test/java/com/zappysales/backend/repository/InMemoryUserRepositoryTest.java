@@ -34,22 +34,22 @@ class InMemoryUserRepositoryTest {
         assertEquals(3, users.size());
         
         // Assert first user
-        Optional<User> john = userRepository.findByEmail("john.doe@example.com");
-        assertTrue(john.isPresent());
-        assertEquals("John", john.get().getFirstName());
-        assertEquals(2, john.get().getAddresses().size());
+        Optional<User> emmanuel = userRepository.findByEmail("emmanuel.ngane@example.cm");
+        assertTrue(emmanuel.isPresent());
+        assertEquals("Emmanuel", emmanuel.get().getFirstName());
+        assertEquals(2, emmanuel.get().getAddresses().size());
 
         // Assert second user
-        Optional<User> jane = userRepository.findByEmail("jane.smith@example.com");
-        assertTrue(jane.isPresent());
-        assertEquals("Jane", jane.get().getFirstName());
-        assertEquals(2, jane.get().getAddresses().size());
+        Optional<User> jean = userRepository.findByEmail("jean.mbappe@example.cm");
+        assertTrue(jean.isPresent());
+        assertEquals("Jean", jean.get().getFirstName());
+        assertEquals(2, jean.get().getAddresses().size());
 
         // Assert third user
-        Optional<User> robert = userRepository.findByEmail("robert.j@example.com");
-        assertTrue(robert.isPresent());
-        assertEquals("Robert", robert.get().getFirstName());
-        assertEquals(2, robert.get().getAddresses().size());
+        Optional<User> marie = userRepository.findByEmail("marie.ngo@example.cm");
+        assertTrue(marie.isPresent());
+        assertEquals("Marie", marie.get().getFirstName());
+        assertEquals(2, marie.get().getAddresses().size());
     }
 
     @Test
@@ -64,8 +64,8 @@ class InMemoryUserRepositoryTest {
     @Test
     void findByEmail_CaseInsensitiveSuccess() {
         // Act
-        Optional<User> userUpper = userRepository.findByEmail("JOHN.DOE@EXAMPLE.COM");
-        Optional<User> userLower = userRepository.findByEmail("john.doe@example.com");
+        Optional<User> userUpper = userRepository.findByEmail("EMMANUEL.NGANE@EXAMPLE.CM");
+        Optional<User> userLower = userRepository.findByEmail("emmanuel.ngane@example.cm");
 
         // Assert
         assertTrue(userUpper.isPresent());
@@ -94,24 +94,24 @@ class InMemoryUserRepositoryTest {
     @Test
     void save_UpdatesExistingUserAndDeepClones() {
         // Arrange
-        Optional<User> optUser = userRepository.findByEmail("john.doe@example.com");
+        Optional<User> optUser = userRepository.findByEmail("emmanuel.ngane@example.cm");
         assertTrue(optUser.isPresent());
-        User john = optUser.get();
-        john.setFirstName("Johnny");
+        User emmanuel = optUser.get();
+        emmanuel.setFirstName("Emma");
 
         // Act
-        userRepository.save(john);
+        userRepository.save(emmanuel);
 
         // Assert
-        Optional<User> updatedJohn = userRepository.findById(john.getId());
-        assertTrue(updatedJohn.isPresent());
-        assertEquals("Johnny", updatedJohn.get().getFirstName());
+        Optional<User> updatedEmmanuel = userRepository.findById(emmanuel.getId());
+        assertTrue(updatedEmmanuel.isPresent());
+        assertEquals("Emma", updatedEmmanuel.get().getFirstName());
         
         // Ensure changing the returned object does not modify repo data until save is called
-        updatedJohn.get().setFirstName("ShouldNotBeInRepo");
-        Optional<User> johnCheck = userRepository.findById(john.getId());
-        assertTrue(johnCheck.isPresent());
-        assertEquals("Johnny", johnCheck.get().getFirstName());
+        updatedEmmanuel.get().setFirstName("ShouldNotBeInRepo");
+        Optional<User> emmanuelCheck = userRepository.findById(emmanuel.getId());
+        assertTrue(emmanuelCheck.isPresent());
+        assertEquals("Emma", emmanuelCheck.get().getFirstName());
     }
 
     @Test
@@ -134,9 +134,9 @@ class InMemoryUserRepositoryTest {
     @Test
     void deleteById_RemovesUser() {
         // Arrange
-        Optional<User> john = userRepository.findByEmail("john.doe@example.com");
-        assertTrue(john.isPresent());
-        UUID id = john.get().getId();
+        Optional<User> emmanuel = userRepository.findByEmail("emmanuel.ngane@example.cm");
+        assertTrue(emmanuel.isPresent());
+        UUID id = emmanuel.get().getId();
 
         // Act
         userRepository.deleteById(id);
@@ -164,40 +164,40 @@ class InMemoryUserRepositoryTest {
     @Test
     void findUsers_Search_FirstName() {
         // Act
-        List<User> results = userRepository.findUsers(0, 10, "Jane");
+        List<User> results = userRepository.findUsers(0, 10, "Jean");
 
         // Assert
         assertEquals(1, results.size());
-        assertEquals("Jane", results.get(0).getFirstName());
+        assertEquals("Jean", results.get(0).getFirstName());
     }
 
     @Test
     void findUsers_Search_LastName() {
         // Act
-        List<User> results = userRepository.findUsers(0, 10, "Smith");
+        List<User> results = userRepository.findUsers(0, 10, "Mbappe");
 
         // Assert
         assertEquals(1, results.size());
-        assertEquals("Smith", results.get(0).getLastName());
+        assertEquals("Mbappe", results.get(0).getLastName());
     }
 
     @Test
     void findUsers_Search_Email() {
         // Act
-        List<User> results = userRepository.findUsers(0, 10, "robert.j");
+        List<User> results = userRepository.findUsers(0, 10, "marie.n");
 
         // Assert
         assertEquals(1, results.size());
-        assertEquals("robert.j@example.com", results.get(0).getEmail());
+        assertEquals("marie.ngo@example.cm", results.get(0).getEmail());
     }
 
     @Test
     void findUsers_Search_CaseInsensitive() {
         // Act
-        List<User> results = userRepository.findUsers(0, 10, "jOhN");
+        List<User> results = userRepository.findUsers(0, 10, "nG");
 
         // Assert
-        assertEquals(2, results.size()); // matches "John" Doe and "john.doe@example.com" and "Johnson"
+        assertEquals(2, results.size()); // matches Ngane and Ngo
     }
 
     @Test
@@ -222,7 +222,7 @@ class InMemoryUserRepositoryTest {
     void countUsers_ReturnsCorrectCount() {
         // Act & Assert
         assertEquals(3, userRepository.countUsers(""));
-        assertEquals(2, userRepository.countUsers("john"));
+        assertEquals(2, userRepository.countUsers("ng"));
         assertEquals(0, userRepository.countUsers("NonExistentNameString"));
     }
 }
