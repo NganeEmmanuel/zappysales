@@ -60,17 +60,17 @@
 ---
 
 ## Phase 6 - Frontend Testing
-- [ ] Store tests
-- [ ] Component tests
-- [ ] Page tests
+- [x] Store tests
+- [x] Component tests
+- [x] Page tests
 
 ---
 
 ## Phase 7 - Documentation
-- [ ] README
-- [ ] Architecture document
-- [ ] API contract document
-- [ ] Environment variables guide
+- [x] README
+- [x] Architecture document
+- [x] API contract document
+- [x] Environment variables guide
 
 ---
 
