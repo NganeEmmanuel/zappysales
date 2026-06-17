@@ -1,27 +1,76 @@
-import React from 'react';
-import { Typography, Paper, Button } from '@mui/material';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import useUsers from '../hooks/useUsers';
+import UserProfileCard from '../components/UserProfileCard';
+import AddressSection from '../components/AddressSection';
+import PageHeader from '../../../shared/components/PageHeader';
+import LoadingSpinner from '../../../shared/components/LoadingSpinner';
+import ErrorAlert from '../../../shared/components/ErrorAlert';
+import EmptyState from '../../../shared/components/EmptyState';
+import PersonIcon from '@mui/icons-material/Person';
 
 /**
- * Placeholder view rendering user details and address management.
+ * Page view loading and rendering details of a single user along with their addresses.
  */
 export const UserDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { selectedUser, loading, error, fetchUserById, clearSelectedUser } = useUsers();
+
+  useEffect(() => {
+    if (id) {
+      fetchUserById(id);
+    }
+    return () => {
+      clearSelectedUser();
+    };
+  }, [id, fetchUserById, clearSelectedUser]);
+
+  const handleBack = () => {
+    navigate('/users');
+  };
+
+  const pageTitle = selectedUser 
+    ? `${selectedUser.firstName} ${selectedUser.lastName}` 
+    : 'User Details';
 
   return (
-    <div className="flex flex-col gap-6">
-      <Paper className="p-8 bg-[#172a45] rounded-lg border border-white/5">
-        <Typography variant="h4" component="h1" className="font-semibold mb-4 text-white">
-          User Details
-        </Typography>
-        <Typography variant="body1" color="text.secondary" className="mb-4">
-          This is a placeholder for the User detail and Address management view. User ID: <strong>{id}</strong>
-        </Typography>
-        <Button variant="outlined" color="primary" onClick={() => navigate('/users')}>
-          Back to Directory
-        </Button>
-      </Paper>
+    <div className="flex flex-col gap-8 w-full">
+      <PageHeader
+        title={pageTitle}
+        subtitle="Manage personal data fields and billing/shipping addresses."
+        action={
+          <Button 
+            variant="outlined" 
+            color="primary" 
+            startIcon={<ArrowBackIcon />}
+            onClick={handleBack}
+          >
+            Back to Directory
+          </Button>
+        }
+      />
+
+      {loading ? (
+        <LoadingSpinner message="Fetching user details profile..." minHeight="300px" />
+      ) : error ? (
+        <ErrorAlert message={error} onRetry={() => id && fetchUserById(id)} />
+      ) : !selectedUser ? (
+        <EmptyState
+          title="User Not Found"
+          description="The requested user profile could not be located in the database."
+          icon={<PersonIcon />}
+          actionText="Back to Directory"
+          onAction={handleBack}
+        />
+      ) : (
+        <div className="flex flex-col gap-8">
+          <UserProfileCard user={selectedUser} />
+          <AddressSection addresses={selectedUser.addresses || []} />
+        </div>
+      )}
     </div>
   );
 };
