@@ -3,6 +3,7 @@ import { Card, CardContent, CardActions, Typography, IconButton } from '@mui/mat
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import type { Address } from '../types';
+import styles from './AddressCard.module.css';
 
 interface AddressCardProps {
   address: Address;
@@ -15,23 +16,23 @@ interface AddressCardProps {
  */
 export const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) => {
   return (
-    <Card className="flex flex-col bg-[#172a45] border border-white/5 rounded-lg h-full justify-between">
-      <CardContent className="p-5 flex-grow">
-        <Typography variant="subtitle1" className="font-semibold text-white mb-2 truncate">
+    <Card className={styles.card}>
+      <CardContent className={styles.content}>
+        <Typography variant="subtitle1" className={styles.street}>
           {address.street}
         </Typography>
-        <Typography variant="body2" className="text-slate-300">
+        <Typography variant="body2" className={styles.details}>
           {address.city}, {address.state}
         </Typography>
-        <Typography variant="body2" className="text-slate-300">
+        <Typography variant="body2" className={styles.details}>
           {address.country}
         </Typography>
-        <Typography variant="caption" className="text-slate-400 mt-2 block font-mono">
+        <Typography variant="caption" className={styles.postalCode}>
           Postal Code: {address.postalCode}
         </Typography>
       </CardContent>
       {(onEdit || onDelete) && (
-        <CardActions className="justify-end p-2 bg-white/2">
+        <CardActions className={styles.actions}>
           {onEdit && (
             <IconButton 
               size="small" 

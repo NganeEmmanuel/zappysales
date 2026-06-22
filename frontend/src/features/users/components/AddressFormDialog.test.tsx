@@ -58,7 +58,7 @@ describe('AddressFormDialog', () => {
     expect(screen.getByRole('button', { name: /save/i })).not.toBeDisabled();
   });
 
-  it('should validate inputs correctly and disable save button accordingly', () => {
+  it('should validate inputs correctly, disable save button, and display helper texts accordingly', () => {
     // Arrange
     render(
       <AddressFormDialog
@@ -91,6 +91,31 @@ describe('AddressFormDialog', () => {
     // Make street exceed 150 characters
     fireEvent.change(screen.getByLabelText(/street address/i), { target: { value: 'a'.repeat(151) } });
     expect(saveButton).toBeDisabled();
+    expect(screen.getByText('Street address must not exceed 150 characters')).toBeInTheDocument();
+
+    // Reset street and make city exceed 100 characters
+    fireEvent.change(screen.getByLabelText(/street address/i), { target: { value: '123 Fake St' } });
+    fireEvent.change(screen.getByLabelText(/city/i), { target: { value: 'b'.repeat(101) } });
+    expect(saveButton).toBeDisabled();
+    expect(screen.getByText('City name must not exceed 100 characters')).toBeInTheDocument();
+
+    // Reset city and make state exceed 100 characters
+    fireEvent.change(screen.getByLabelText(/city/i), { target: { value: 'Shelbyville' } });
+    fireEvent.change(screen.getByLabelText(/state \/ province/i), { target: { value: 'c'.repeat(101) } });
+    expect(saveButton).toBeDisabled();
+    expect(screen.getByText('State/Province must not exceed 100 characters')).toBeInTheDocument();
+
+    // Reset state and make country exceed 100 characters
+    fireEvent.change(screen.getByLabelText(/state \/ province/i), { target: { value: 'IL' } });
+    fireEvent.change(screen.getByLabelText(/country/i), { target: { value: 'd'.repeat(101) } });
+    expect(saveButton).toBeDisabled();
+    expect(screen.getByText('Country name must not exceed 100 characters')).toBeInTheDocument();
+
+    // Reset country and make postal code exceed 20 characters
+    fireEvent.change(screen.getByLabelText(/country/i), { target: { value: 'USA' } });
+    fireEvent.change(screen.getByLabelText(/postal code/i), { target: { value: 'e'.repeat(21) } });
+    expect(saveButton).toBeDisabled();
+    expect(screen.getByText('Postal code must not exceed 20 characters')).toBeInTheDocument();
   });
 
   it('should invoke onSave callback with correct payload when form is submitted', () => {

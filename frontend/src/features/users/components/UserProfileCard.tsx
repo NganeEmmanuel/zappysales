@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, Typography, Grid, Divider } from '@mui/material';
 import type { User } from '../types';
+import styles from './UserProfileCard.module.css';
 
 interface UserProfileCardProps {
   user: User;
@@ -11,42 +12,42 @@ interface UserProfileCardProps {
  */
 export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
   return (
-    <Card className="bg-[#172a45] border border-white/5 rounded-lg">
-      <CardContent className="p-6">
-        <Typography variant="h5" component="h2" className="font-semibold text-white mb-4">
+    <Card className={styles.card}>
+      <CardContent className={styles.content}>
+        <Typography variant="h5" component="h2" className={styles.title}>
           Personal Information
         </Typography>
-        <Divider className="bg-white/10 mb-6" />
+        <Divider className={styles.divider} />
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Typography variant="caption" className="text-slate-400 block mb-1">
+            <Typography variant="caption" className={styles.label}>
               FIRST NAME
             </Typography>
-            <Typography variant="body1" className="text-white font-medium">
+            <Typography variant="body1" className={styles.value}>
               {user.firstName}
             </Typography>
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Typography variant="caption" className="text-slate-400 block mb-1">
+            <Typography variant="caption" className={styles.label}>
               LAST NAME
             </Typography>
-            <Typography variant="body1" className="text-white font-medium">
+            <Typography variant="body1" className={styles.value}>
               {user.lastName}
             </Typography>
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Typography variant="caption" className="text-slate-400 block mb-1">
+            <Typography variant="caption" className={styles.label}>
               EMAIL ADDRESS
             </Typography>
-            <Typography variant="body1" className="text-white font-medium">
+            <Typography variant="body1" className={styles.value}>
               {user.email}
             </Typography>
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Typography variant="caption" className="text-slate-400 block mb-1">
+            <Typography variant="caption" className={styles.label}>
               USER ID
             </Typography>
-            <Typography variant="body1" className="text-slate-400 font-mono break-all text-xs">
+            <Typography variant="body1" className={styles.idValue}>
               {user.id}
             </Typography>
           </Grid>

@@ -1,23 +1,9 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, CssBaseline } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import NotificationSnackbar from '../components/NotificationSnackbar';
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#90caf9',
-    },
-    background: {
-      default: '#0a192f',
-      paper: '#172a45',
-    },
-  },
-  typography: {
-    fontFamily: '"Outfit", "Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-  },
-});
+import AppThemeProvider from '../theme/ThemeProvider';
+import styles from './AppLayout.module.css';
 
 /**
  * Main application layout wrapping all page views.
@@ -25,23 +11,23 @@ const darkTheme = createTheme({
  */
 export const AppLayout: React.FC = () => {
   return (
-    <ThemeProvider theme={darkTheme}>
+    <AppThemeProvider>
       <CssBaseline />
-      <div className="flex flex-col min-h-screen bg-[#0a192f]">
-        <AppBar position="static" elevation={0} className="border-b border-white/10 bg-[#172a45]">
+      <div className={styles.layoutContainer}>
+        <AppBar position="static" elevation={0} className={styles.appBar}>
           <Toolbar>
-            <Typography variant="h6" component="div" className="flex-grow font-bold tracking-wide">
+            <Typography variant="h6" component="div" className={styles.title}>
               ZappySales
             </Typography>
           </Toolbar>
         </AppBar>
 
-        <Container component="main" className="flex-grow py-8 flex flex-col">
+        <Container component="main" className={styles.mainContent}>
           <Outlet />
         </Container>
       </div>
       <NotificationSnackbar />
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 };
 

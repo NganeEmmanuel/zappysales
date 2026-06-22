@@ -1,0 +1,34 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  background-color: #172a45;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.name {
+  font-weight: 600 !important;
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
+.email {
+  color: #94a3b8;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.addressesCount {
+  color: #64748b;
+}
+
+.actions {
+  padding: 1rem;
+  padding-top: 0;
+}

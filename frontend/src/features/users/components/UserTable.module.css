@@ -1,0 +1,37 @@
+.tableContainer {
+  background-color: #172a45 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.tableHead {
+  background-color: #233554;
+}
+
+.headerCell {
+  font-weight: 600 !important;
+  color: #ffffff !important;
+}
+
+.tableRow {
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tableRow:last-child {
+  border-bottom: 0;
+}
+
+.tableRow:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.nameCell {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+.textCell {
+  color: #cbd5e1 !important;
+}

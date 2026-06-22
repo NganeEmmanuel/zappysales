@@ -14,6 +14,8 @@ import ErrorAlert from '../../../shared/components/ErrorAlert';
 import EmptyState from '../../../shared/components/EmptyState';
 import useAppStore from '../../../stores/appStore';
 
+import styles from './UsersPage.module.css';
+
 /**
  * View page loading and displaying the complete collection of User records.
  * Integrates server-side pagination, search filters, loading states, and creation dialogs.
@@ -172,7 +174,7 @@ export const UsersPage: React.FC = () => {
           onAction={searchTerm ? handleClearSearch : () => setIsCreateDialogOpen(true)}
         />
       ) : (
-        <div className="flex flex-col border border-white/5 rounded-lg overflow-hidden bg-[#172a45]">
+        <div className={styles.tableWrapper}>
           <UserTable users={users} onViewDetails={handleViewDetails} />
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}

@@ -53,7 +53,7 @@ describe('UserFormDialog', () => {
     expect(screen.getByRole('button', { name: /save/i })).not.toBeDisabled();
   });
 
-  it('should disable the save button when inputs are invalid', () => {
+  it('should disable the save button when inputs are invalid and display correct helper texts', () => {
     // Arrange
     render(
       <UserFormDialog
@@ -75,6 +75,12 @@ describe('UserFormDialog', () => {
     // Set invalid email format
     fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'invalid-email' } });
     expect(saveButton).toBeDisabled();
+    expect(screen.getByText('Must be a valid email address')).toBeInTheDocument();
+
+    // Set email exceeding 100 characters
+    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'a'.repeat(93) + '@example.com' } });
+    expect(saveButton).toBeDisabled();
+    expect(screen.getByText('Email must not exceed 100 characters')).toBeInTheDocument();
 
     // Set valid email
     fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'john.doe@example.com' } });
@@ -83,6 +89,13 @@ describe('UserFormDialog', () => {
     // Make first name exceed 50 characters
     fireEvent.change(screen.getByLabelText(/first name/i), { target: { value: 'a'.repeat(51) } });
     expect(saveButton).toBeDisabled();
+    expect(screen.getByText('First name must not exceed 50 characters')).toBeInTheDocument();
+
+    // Reset first name and make last name exceed 50 characters
+    fireEvent.change(screen.getByLabelText(/first name/i), { target: { value: 'John' } });
+    fireEvent.change(screen.getByLabelText(/last name/i), { target: { value: 'b'.repeat(51) } });
+    expect(saveButton).toBeDisabled();
+    expect(screen.getByText('Last name must not exceed 50 characters')).toBeInTheDocument();
   });
 
   it('should invoke onSave callback with correct payload when form is valid and submitted', () => {

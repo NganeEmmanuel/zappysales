@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, Button } from '@mui/material';
+import styles from './EmptyState.module.css';
 
 interface EmptyStateProps {
   title: string;
@@ -20,12 +21,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   onAction
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-white/10 rounded-lg bg-[#172a45] my-8 gap-4">
-      {icon && <div className="text-[48px] text-slate-400 opacity-80">{icon}</div>}
+    <div className={styles.container}>
+      {icon && <div className={styles.icon}>{icon}</div>}
       <Typography variant="h6" className="font-semibold text-white">
         {title}
       </Typography>
-      <Typography variant="body2" color="text.secondary" className="max-w-[400px]">
+      <Typography variant="body2" color="text.secondary" className={styles.description}>
         {description}
       </Typography>
       {actionText && onAction && (
